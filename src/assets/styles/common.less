@@ -1,3 +1,18 @@
+// 最外层样式设置
+html,body,#app {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+// 左边导航栏样式修改
+.menus {
+  // /deep/ .el-menu-vertical-demo:not(.el-menu--collapse) {
+  //   width: 200px;
+  //   min-height: 400px;
+  // }
+}
+// 表单统一样式修改
 .form {
   /deep/ .el-form-item {
     .el-form-item__content {
@@ -13,5 +28,11 @@
         }
       }
     }
+  }
+}
+.table-block {
+  /deep/ .demo-form-inline {
+    display: flex;
+    justify-content: flex-end;
   }
 }

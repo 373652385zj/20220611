@@ -2,14 +2,14 @@
  * @Author: 张泽基 m15105958776_1@163.com
  * @Date: 2022-06-13 16:32:08
  * @LastEditors: 张泽基 m15105958776_1@163.com
- * @LastEditTime: 2022-06-24 16:49:29
+ * @LastEditTime: 2022-07-01 15:27:02
  * @FilePath: /person/20220611/src/views/Login.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div class="login">
     <div class="form">
-      <h1>Login</h1>
+      <h1 class="title">Login</h1>
       <el-form
         ref="loginForm"
         :model="loginForm"
@@ -43,7 +43,7 @@ export default {
   data() {
     return {
       loginForm: {
-        phone: "15105958776",
+        phone: "15105958774",
         password: "123456",
       },
       loginRules: {
@@ -61,10 +61,10 @@ export default {
       };
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          login(params).then(res => {
-            if (res.data.code === 666) {
-              this.$store.commit("setUserInfo", res.data.data);
-            }
+          login(params).then((res) => {
+            console.log("login", res);
+            this.$message(res.data.message);
+            console.log(this.$message);
           });
         } else {
           console.log("error submit!!");
@@ -82,6 +82,9 @@ export default {
     width: 500px;
     height: 500px;
     margin: 0 auto;
+    .title {
+      text-align: center;
+    }
   }
 }
 </style>
