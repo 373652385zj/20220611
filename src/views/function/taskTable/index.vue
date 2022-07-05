@@ -2,7 +2,7 @@
  * @Author: 张泽基 m15105958776_1@163.com
  * @Date: 2022-06-30 14:36:05
  * @LastEditors: 张泽基 m15105958776_1@163.com
- * @LastEditTime: 2022-07-04 10:12:37
+ * @LastEditTime: 2022-07-05 11:52:30
  * @FilePath: /20220611/src/views/function/taskTable/index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -17,6 +17,9 @@
           <div class="item" @click="openTestDialog(data)">
             {{ data.day.split("-").slice(1).join("-") }}
             {{ data.isSelected ? "✔️" : "" }}
+            <span v-if="dateTaskMount[data.day]" class="mount">
+              {{ dateTaskMount[data.day] }}
+            </span>
           </div>
         </div>
       </template>
@@ -38,6 +41,9 @@
             <el-button type="text" size="small" @click="editTask(scope.row)"
               >编辑</el-button
             >
+            <el-button type="text" size="small" @click="delTaskItemQuery(scope.row)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -50,11 +56,11 @@
     </el-dialog>
     <!-- 编辑任务的弹框 -->
     <el-dialog title="编辑任务" :visible.sync="dialogEditFormVisible">
-      <el-form :model="editOrForm" label-width="80px">
-        <el-form-item label="任务内容">
+      <el-form ref="editOrAddForm" :model="editOrAddForm" :rules="editOrAddRules" label-width="80px">
+        <el-form-item label="任务内容" prop="task">
           <el-input v-model="editOrAddForm.task" style="width: 350px"></el-input>
         </el-form-item>
-        <el-form-item label="时间段">
+        <el-form-item label="时间段" prop="periodOfTime">
           <el-time-picker
             is-range
             v-model="periodOfTimePicker"
@@ -70,7 +76,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogEditFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="method === 'edit' ? editTaskItemQuery : addTaskItemQuery"
+        <el-button type="primary" @click="submit"
           >确 定</el-button
         >
       </div>
@@ -79,7 +85,13 @@
 </template>
 
 <script>
-import { getTaskList, editTaskItem } from '@/api/task.js'
+import {
+  getTaskList,
+  editTaskItem,
+  addTaskItem,
+  delTaskItem,
+  getTaskDateList,
+} from '@/api/task.js'
 export default {
   data() {
     return {
@@ -99,11 +111,44 @@ export default {
         task: "", // 任务内容
         periodOfTime: "", // 时间段
       },
-      periodOfTimePicker: [],
+      editOrAddRules: {
+        task: [{ required: true, message: "请输入任务内容", trigger: "blur" }],
+        periodOfTime: [{ required: true, message: "请选择时间段", trigger: "blur" }],
+      },
+      periodOfTimePicker: [new Date(), new Date()],
       dialogEditFormVisible: false,
+      dateTaskMount: {},
     };
   },
+  mounted() {
+    this.getTaskDateListQuery();
+  },
   methods: {
+    // 获取当前所有存在任务的日期
+    async getTaskDateListQuery() {
+      await getTaskDateList().then((res) => {
+        let dates = [];
+        res.data.data.map((item) => {
+          dates.push(item.date);
+        });
+        let dateList = Array.from(new Set(dates));
+        this.dateTaskMount = [];
+        dateList.map((item) => {
+          this.$set(this.dateTaskMount, item, this.ItemMounted(dates, item));
+        });
+        console.log("dateTaskMount", this.dateTaskMount);
+      });
+    },
+    // 某元素在数组中的数量
+    ItemMounted(arr, ele) {
+      var temp = [];
+      for (var index = 0; index < arr.length; index++) {
+        if (arr[index] == ele) {
+          temp.push(true);
+        }
+      }
+      return temp.length;
+    },
     // 获取任务列表
     getTaskListQuery() {
       getTaskList({
@@ -111,19 +156,44 @@ export default {
         date: this.activeDate,
       }).then((res) => {
         this.taskTableData = res.data.data;
+        this.getTaskDateListQuery();
+      });
+    },
+    submit() {
+      this.$refs["editOrAddForm"].validate((valid) => {
+        if (valid) {
+          if (this.method === "edit") {
+            this.editTaskItemQuery();
+          } else {
+            this.addTaskItemQuery();
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
       });
     },
     // 编辑任务请求
     async editTaskItemQuery() {
-      console.log(this.editOrAddForm);
+      console.log("editTaskItemQuery", this.editOrAddForm);
       await editTaskItem(this.editOrAddForm);
       this.dialogEditFormVisible = false;
+      this.getTaskListQuery();
     },
     // 添加任务请求
     async addTaskItemQuery() {
-      console.log(this.editOrAddForm);
-      // await addTaskItem(this.editOrAddForm);
-      // this.dialogEditFormVisible = false;
+      this.editOrAddForm.phone = this.$store.state.userInfo.phone;
+      this.editOrAddForm.date = this.activeDate;
+      console.log("addTaskItemQuery", this.editOrAddForm);
+      await addTaskItem(this.editOrAddForm);
+      this.dialogEditFormVisible = false;
+      this.getTaskListQuery();
+    },
+    // 删除任务请求
+    async delTaskItemQuery(item) {
+      console.log("addTaskItemQuery", this.editOrAddForm);
+      await delTaskItem({ id: item.id });
+      this.getTaskListQuery();
     },
     // 时间修改触发
     changePeriodOfTime(val) {
@@ -154,7 +224,7 @@ export default {
         task: "", // 任务内容
         periodOfTime: "", // 时间段
       };
-      this.periodOfTimePicker = [];
+      // this.periodOfTimePicker = [];
       this.dialogEditFormVisible = true;
     },
   },
@@ -169,6 +239,24 @@ export default {
     .item {
       width: 100%;
       height: 100%;
+      position: relative;
+      .mount {
+        display: inline-block;
+        min-width: 25px;
+        padding: 0 10px;
+        box-sizing: border-box;
+        height: 25px;
+        line-height: 25px;
+        text-align: center;
+        color: white;
+        background: #2c3e50;
+        border-top-left-radius: 50%;
+        border-bottom-left-radius: 50%;
+        border-bottom-right-radius: 50%;
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
     }
   }
 }

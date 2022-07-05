@@ -2,7 +2,7 @@
  * @Author: 张泽基 m15105958776_1@163.com
  * @Date: 2022-06-13 16:32:08
  * @LastEditors: 张泽基 m15105958776_1@163.com
- * @LastEditTime: 2022-07-01 15:27:02
+ * @LastEditTime: 2022-07-04 20:23:27
  * @FilePath: /person/20220611/src/views/Login.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -64,7 +64,6 @@ export default {
           login(params).then((res) => {
             console.log("login", res);
             this.$message(res.data.message);
-            console.log(this.$message);
           });
         } else {
           console.log("error submit!!");

@@ -2,7 +2,7 @@
  * @Author: 张泽基 m15105958776_1@163.com
  * @Date: 2022-06-13 16:32:08
  * @LastEditors: 张泽基 m15105958776_1@163.com
- * @LastEditTime: 2022-07-01 17:40:33
+ * @LastEditTime: 2022-07-04 20:21:46
  * @FilePath: /person/20220611/src/main.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -24,6 +24,7 @@ import {
   Calendar,
   Empty,
   TimePicker,
+  ButtonGroup,
 } from "element-ui";
 import App from "./App.vue";
 import router from "./router";
@@ -49,6 +50,7 @@ Vue.use(Dialog);
 Vue.use(Calendar);
 Vue.use(Empty);
 Vue.use(TimePicker);
+Vue.use(ButtonGroup);
 Vue.prototype.$message = Message;
 Vue.prototype.$Dialog = Dialog;
 
