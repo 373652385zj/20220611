@@ -2,7 +2,7 @@
  * @Author: 张泽基 m15105958776_1@163.com
  * @Date: 2022-07-01 16:54:02
  * @LastEditors: 张泽基 m15105958776_1@163.com
- * @LastEditTime: 2022-07-05 11:42:08
+ * @LastEditTime: 2022-07-05 16:11:44
  * @FilePath: /20220611/src/api/tesk.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -11,7 +11,7 @@ import _this from "../main.js";
 export function getTaskList(query) {
   return new Promise((resolve, reject) => {
     _this.$axios
-      .post("/api/getTaskList", query)
+      .post(process.env.VUE_APP_BASE_API + "getTaskList", query)
       .then((res) => {
         resolve(res);
       })
@@ -25,7 +25,7 @@ export function getTaskList(query) {
 export function editTaskItem(query) {
   return new Promise((resolve, reject) => {
     _this.$axios
-      .post("/api/editTask", query)
+      .post(process.env.VUE_APP_BASE_API + "editTask", query)
       .then((res) => {
         resolve(res);
       })
@@ -39,7 +39,7 @@ export function editTaskItem(query) {
 export function addTaskItem(query) {
   return new Promise((resolve, reject) => {
     _this.$axios
-      .post("/api/addTask", query)
+      .post(process.env.VUE_APP_BASE_API + "addTask", query)
       .then((res) => {
         resolve(res);
       })
@@ -53,7 +53,7 @@ export function addTaskItem(query) {
 export function delTaskItem(query) {
   return new Promise((resolve, reject) => {
     _this.$axios
-      .post("/api/delTask", query)
+      .post(process.env.VUE_APP_BASE_API + "delTask", query)
       .then((res) => {
         resolve(res);
       })
@@ -67,7 +67,7 @@ export function delTaskItem(query) {
 export function getTaskDateList(query) {
   return new Promise((resolve, reject) => {
     _this.$axios
-      .post("/api/getTaskDateList", query)
+      .post(process.env.VUE_APP_BASE_API + "getTaskDateList", query)
       .then((res) => {
         resolve(res);
       })

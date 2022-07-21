@@ -2,7 +2,7 @@
  * @Author: 张泽基 m15105958776_1@163.com
  * @Date: 2022-06-23 14:18:41
  * @LastEditors: 张泽基 m15105958776_1@163.com
- * @LastEditTime: 2022-06-30 16:30:11
+ * @LastEditTime: 2022-07-05 19:40:45
  * @FilePath: /20220611/src/api/user.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -13,7 +13,7 @@ export function isLogin() {
     console.log(_this, _this.$route.path);
     console.log("登录状态判断");
     _this.$axios
-      .get("/api/isLogin")
+      .get(process.env.VUE_APP_BASE_API + "isLogin")
       .then((res) => {
         console.log(res);
         resolve(res);
@@ -38,7 +38,7 @@ export function isLogin() {
 export function login(query) {
   return new Promise((resolve, reject) => {
     _this.$axios
-      .post("/api/login", query)
+      .post(process.env.VUE_APP_BASE_API + "login", query)
       .then((res) => {
         if (res.data.code === 666) {
           _this.$store.state.isLogin = true;
@@ -57,7 +57,7 @@ export function login(query) {
 export function userInfo(query) {
   return new Promise((resolve, reject) => {
     _this.$axios
-      .post("/api/getUserInfo", query)
+      .post(process.env.VUE_APP_BASE_API + "getUserInfo", query)
       .then((res) => {
         resolve(res);
       })
@@ -71,7 +71,7 @@ export function userInfo(query) {
 export function register(query) {
   return new Promise((resolve, reject) => {
     _this.$axios
-      .post("/api/register", query)
+      .post(process.env.VUE_APP_BASE_API + "register", query)
       .then((res) => {
         if (res.data.code === 666) {
           _this.$router.push({ path: "/" });
@@ -88,7 +88,7 @@ export function register(query) {
 export function logout(query) {
   return new Promise((resolve, reject) => {
     _this.$axios
-      .post("/api/logout", query)
+      .post(process.env.VUE_APP_BASE_API + "logout", query)
       .then((res) => {
         resolve(res);
         if (res.data.code === 666) {
@@ -107,7 +107,7 @@ export function logout(query) {
 export function userList(query) {
   return new Promise((resolve, reject) => {
     _this.$axios
-      .post("/api/userList", query)
+      .post(process.env.VUE_APP_BASE_API + "userList", query)
       .then((res) => {
         resolve(res);
       })
@@ -121,7 +121,7 @@ export function userList(query) {
 export function validCodeList(query) {
   return new Promise((resolve, reject) => {
     _this.$axios
-      .post("/api/validCodeList", query)
+      .post(process.env.VUE_APP_BASE_API + "validCodeList", query)
       .then((res) => {
         resolve(res);
       })
@@ -135,7 +135,7 @@ export function validCodeList(query) {
 export function updateValidCode(query) {
   return new Promise((resolve, reject) => {
     _this.$axios
-      .post("/api/updateValidCode", query)
+      .post(process.env.VUE_APP_BASE_API + "updateValidCode", query)
       .then((res) => {
         resolve(res);
       })
@@ -149,7 +149,7 @@ export function updateValidCode(query) {
 export function getIdentify(query) {
   return new Promise((resolve, reject) => {
     _this.$axios
-      .post("/api/getIdentify", query)
+      .post(process.env.VUE_APP_BASE_API + "getIdentify", query)
       .then((res) => {
         resolve(res);
       })
@@ -163,7 +163,7 @@ export function getIdentify(query) {
 export function getIdentifyList(query) {
   return new Promise((resolve, reject) => {
     _this.$axios
-      .post("/api/getIdentifyList", query)
+      .post(process.env.VUE_APP_BASE_API + "getIdentifyList", query)
       .then((res) => {
         resolve(res);
       })
